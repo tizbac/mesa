@@ -865,6 +865,10 @@ _mesa_dest_buffer_exists(struct gl_context *ctx, GLenum format)
 GLenum
 _mesa_get_color_read_format(struct gl_context *ctx)
 {
+    if ( !ctx->ReadBuffer->_ColorReadBuffer )
+   {
+       return GL_RGBA;
+   }
    switch (ctx->ReadBuffer->_ColorReadBuffer->Format) {
    case MESA_FORMAT_ARGB8888:
       return GL_BGRA;
@@ -882,6 +886,10 @@ _mesa_get_color_read_format(struct gl_context *ctx)
 GLenum
 _mesa_get_color_read_type(struct gl_context *ctx)
 {
+   if ( !ctx->ReadBuffer->_ColorReadBuffer )
+   {
+       return GL_UNSIGNED_BYTE;
+   }
    switch (ctx->ReadBuffer->_ColorReadBuffer->Format) {
    case MESA_FORMAT_ARGB8888:
       return GL_UNSIGNED_BYTE;
