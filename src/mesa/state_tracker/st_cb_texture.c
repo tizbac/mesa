@@ -282,7 +282,8 @@ guess_base_level_size(GLenum target,
                       GLuint *width0, GLuint *height0, GLuint *depth0)
 { 
    const GLuint dims = get_texture_dims(target);
-
+   if ( width == 0 || height == 0) /* Null texture */
+       return GL_FALSE;
    assert(width >= 1);
    assert(height >= 1);
    assert(depth >= 1);

@@ -48,7 +48,6 @@
 #include "teximage.h"
 #include "texobj.h"
 
-
 /** Set this to 1 to debug/log glBlitFramebuffer() calls */
 #define DEBUG_BLIT 0
 
@@ -2125,7 +2124,9 @@ _mesa_FramebufferTexture2DEXT(GLenum target, GLenum attachment,
 
    if (texture != 0) {
       GLboolean error;
-
+      struct gl_texture_object* tObj = _mesa_lookup_texture(ctx, texture);
+      struct gl_texture_image* TexImg = _mesa_get_tex_image(ctx,tObj,textarget,level);
+     
       switch (textarget) {
       case GL_TEXTURE_2D:
          error = GL_FALSE;
@@ -2147,7 +2148,16 @@ _mesa_FramebufferTexture2DEXT(GLenum target, GLenum attachment,
       default:
          error = GL_TRUE;
       }
-
+      if ( !TexImg )
+      {
+          error = GL_TRUE;
+      }else if ( TexImg->Width == 0 || TexImg->Height == 0 || TexImg->Depth == 0 )
+      {
+          error = GL_TRUE;
+      }
+          
+          
+      
       if (error) {
          _mesa_error(ctx, GL_INVALID_OPERATION,
                      "glFramebufferTexture2DEXT(textarget=%s)",
